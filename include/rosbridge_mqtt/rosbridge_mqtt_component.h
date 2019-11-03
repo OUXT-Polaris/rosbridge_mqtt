@@ -41,6 +41,7 @@ extern "C" {
 
 // Headers in ROS2
 #include <rclcpp/rclcpp.hpp>
+#include <ament_index_cpp/get_package_share_directory.hpp>
 
 // Headers in STL
 #include <map>
@@ -59,6 +60,10 @@ namespace rosbridge_mqtt
         std::string host_;
         int port_;
         int keepalive_;
+        std::string cafile_;
+        std::string certfile_;
+        std::string keyfile_;
+        bool with_certification_;
     };
 }
 

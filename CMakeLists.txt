@@ -17,22 +17,27 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(rcl REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
+find_package(rcutils REQUIRED)
+find_package(rmw REQUIRED)
 
 include_directories(
   include
 )
 
-add_library(rosbridge_mqtt_component SHARED src/rosbridge_mqtt_component.cpp)
+add_library(rosbridge_mqtt_component SHARED 
+  src/rosbridge_mqtt_component.cpp src/generic_subscription.cpp)
 target_link_libraries(rosbridge_mqtt_component mosquitto)
 ament_target_dependencies(rosbridge_mqtt_component
-  rclcpp rclcpp_components)
+  rcl rclcpp rclcpp_components ament_index_cpp rmw rcutils)
 
 add_executable(rosbridge_mqtt_node src/rosbridge_mqtt_node.cpp)
 target_link_libraries(rosbridge_mqtt_node rosbridge_mqtt_component)
 ament_target_dependencies(rosbridge_mqtt_node
-  rclcpp rclcpp_components)
+  rcl rclcpp rclcpp_components ament_index_cpp rmw rcutils)
 
 rclcpp_components_register_nodes(rosbridge_mqtt_component
   "rosbridge_mqtt::RosbridgeMqttComponent")
@@ -47,6 +52,10 @@ install(TARGETS
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
+
+install(DIRECTORY config launch
+  DESTINATION share/${PROJECT_NAME}/
+)
 
 ament_export_libraries(rosbridge_mqtt_component)
 

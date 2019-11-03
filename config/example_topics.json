@@ -1,0 +1,13 @@
+{
+    "Topics" :
+    [
+        {
+            "from" : "ros",
+            "topic" : "/test"
+        },
+        {
+            "from" : "mqtt",
+            "topic" : "/test2"
+        }
+    ]
+}
