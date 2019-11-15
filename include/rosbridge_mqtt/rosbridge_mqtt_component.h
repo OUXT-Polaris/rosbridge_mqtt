@@ -53,6 +53,9 @@ extern "C" {
 #include <rosbridge_mqtt/generic_subscription.h>
 #include <rosbridge_mqtt/generic_publisher.h>
 
+// Headers in Yaml-cpp
+#include <yaml-cpp/yaml.h>
+
 namespace rosbridge_mqtt
 {
     class RosbridgeMqttComponent: public rclcpp::Node
@@ -60,6 +63,7 @@ namespace rosbridge_mqtt
     public:
         ROSBRIDGE_MQTT_PUBLIC
         explicit RosbridgeMqttComponent(const rclcpp::NodeOptions & options);
+        ~RosbridgeMqttComponent();
     private:
         std::string host_;
         int port_;
@@ -70,6 +74,9 @@ namespace rosbridge_mqtt
         bool with_certification_;
         std::map<std::string,std::unique_ptr<GenericSubscription> > subs_;
         std::map<std::string,std::unique_ptr<GenericPublisher> > pubs_;
+        YAML::Node config_;
+        std::string client_id_;
+        struct mosquitto *mosq_;
     };
 }
 

@@ -14,6 +14,8 @@ namespace rosbridge_mqtt
         get_parameter("keepalive",keepalive_);
         declare_parameter("with_certification",true);
         get_parameter("with_certification",with_certification_);
+        declare_parameter("client_id","");
+        get_parameter("client_id",client_id_);
         if(with_certification_)
         {
             std::string package_share_directory = ament_index_cpp::get_package_share_directory("rosbridge_mqtt");
@@ -25,5 +27,18 @@ namespace rosbridge_mqtt
             get_parameter("keyfile",keyfile_);
         }
         mosquitto_lib_init();
+        if(client_id_ == "")
+        {
+            mosq_ = mosquitto_new(NULL,false,NULL);
+        }
+        else
+        {
+            mosq_ = mosquitto_new(client_id_.c_str(),false,NULL);
+        }
+    }
+
+    RosbridgeMqttComponent::~RosbridgeMqttComponent()
+    {
+        delete mosq_;
     }
 }
