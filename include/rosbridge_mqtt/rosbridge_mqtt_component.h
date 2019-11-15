@@ -49,6 +49,10 @@ extern "C" {
 // Headers in Mosquitto
 #include <mosquitto.h>
 
+// Headers in this package
+#include <rosbridge_mqtt/generic_subscription.h>
+#include <rosbridge_mqtt/generic_publisher.h>
+
 namespace rosbridge_mqtt
 {
     class RosbridgeMqttComponent: public rclcpp::Node
@@ -64,6 +68,8 @@ namespace rosbridge_mqtt
         std::string certfile_;
         std::string keyfile_;
         bool with_certification_;
+        std::map<std::string,std::unique_ptr<GenericSubscription> > subs_;
+        std::map<std::string,std::unique_ptr<GenericPublisher> > pubs_;
     };
 }
 

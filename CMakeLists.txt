@@ -29,7 +29,9 @@ include_directories(
 )
 
 add_library(rosbridge_mqtt_component SHARED 
-  src/rosbridge_mqtt_component.cpp src/generic_subscription.cpp)
+  src/rosbridge_mqtt_component.cpp 
+  src/generic_subscription.cpp
+  src/generic_publisher.cpp)
 target_link_libraries(rosbridge_mqtt_component mosquitto)
 ament_target_dependencies(rosbridge_mqtt_component
   rcl rclcpp rclcpp_components ament_index_cpp rmw rcutils)
