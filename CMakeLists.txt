@@ -24,6 +24,8 @@ find_package(rclcpp_components REQUIRED)
 find_package(rcutils REQUIRED)
 find_package(rmw REQUIRED)
 
+find_package(Boost REQUIRED COMPONENTS filesystem)
+
 include_directories(
   include
 )
@@ -32,7 +34,7 @@ add_library(rosbridge_mqtt_component SHARED
   src/rosbridge_mqtt_component.cpp 
   src/generic_subscription.cpp
   src/generic_publisher.cpp)
-target_link_libraries(rosbridge_mqtt_component mosquitto yaml-cpp)
+target_link_libraries(rosbridge_mqtt_component mosquitto ${Boost_LIBRARIES})
 ament_target_dependencies(rosbridge_mqtt_component
   rcl rclcpp rclcpp_components ament_index_cpp rmw rcutils)
 

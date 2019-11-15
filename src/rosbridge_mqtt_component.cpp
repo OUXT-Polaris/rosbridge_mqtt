@@ -6,6 +6,7 @@ namespace rosbridge_mqtt
     RosbridgeMqttComponent::RosbridgeMqttComponent(const rclcpp::NodeOptions & options)
     : Node("rosbridge_mqtt", options)
     {
+        mosq_ = NULL;
         declare_parameter("host","localhost");
         get_parameter("host",host_);
         declare_parameter("port",8000);
@@ -26,6 +27,12 @@ namespace rosbridge_mqtt
             declare_parameter("keyfile",package_share_directory+"/config/server.key");
             get_parameter("keyfile",keyfile_);
         }
+        declare_parameter("topic_config_path","");
+        get_parameter("topic_config_path",topic_config_path_);
+        if(!parseConfig())
+        {
+            return;
+        }
         mosquitto_lib_init();
         if(client_id_ == "")
         {
@@ -37,8 +44,22 @@ namespace rosbridge_mqtt
         }
     }
 
-    RosbridgeMqttComponent::~RosbridgeMqttComponent()
+    bool RosbridgeMqttComponent::parseConfig()
     {
-        delete mosq_;
+        namespace fs = boost::filesystem;
+        const fs::path path(topic_config_path_);
+        boost::system::error_code error;
+        const bool result = fs::exists(path, error);
+        if (!result || error)
+        {
+            return false;
+        }
+        using namespace boost::property_tree;
+        ptree pt;
+        read_json(topic_config_path_, pt);
+        return true;
     }
 }
+
+#include <rclcpp_components/register_node_macro.hpp>
+RCLCPP_COMPONENTS_REGISTER_NODE(rosbridge_mqtt::RosbridgeMqttComponent)

@@ -53,8 +53,12 @@ extern "C" {
 #include <rosbridge_mqtt/generic_subscription.h>
 #include <rosbridge_mqtt/generic_publisher.h>
 
-// Headers in Yaml-cpp
-#include <yaml-cpp/yaml.h>
+// Headers in Boost
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/foreach.hpp>
+#include <boost/optional.hpp>
+#include <boost/filesystem.hpp>
 
 namespace rosbridge_mqtt
 {
@@ -63,7 +67,6 @@ namespace rosbridge_mqtt
     public:
         ROSBRIDGE_MQTT_PUBLIC
         explicit RosbridgeMqttComponent(const rclcpp::NodeOptions & options);
-        ~RosbridgeMqttComponent();
     private:
         std::string host_;
         int port_;
@@ -74,9 +77,10 @@ namespace rosbridge_mqtt
         bool with_certification_;
         std::map<std::string,std::unique_ptr<GenericSubscription> > subs_;
         std::map<std::string,std::unique_ptr<GenericPublisher> > pubs_;
-        YAML::Node config_;
         std::string client_id_;
         struct mosquitto *mosq_;
+        std::string topic_config_path_;
+        bool parseConfig();
     };
 }
 

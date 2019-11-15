@@ -17,7 +17,6 @@
   <depend>rclcpp</depend>
   <depend>rcutils</depend>
   <depend>rclcpp_components</depend>
-  <depend>yaml-cpp</depend>
   <depend>ament_index_cpp</depend>
 
   <test_depend>ament_lint_auto</test_depend>
